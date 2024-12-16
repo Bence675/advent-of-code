@@ -4,6 +4,10 @@ import copy
 import scipy
 import tqdm
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
 def read_input():
     file = open("25.txt", "r")
@@ -122,6 +126,77 @@ def part1():
     nodes, edges = read_input()
     for node in nodes:
         print(node, nodes[node])
+
+    print()
+    print(edges)
+    
+
+    edges.remove(("vfx", "bgl"))
+    edges.remove(("bgl", "vfx"))
+
+    edges.remove(("qxr", "btp"))
+    edges.remove(("btp", "qxr"))
+
+    edges.remove(("rxt", "bqq"))
+    edges.remove(("bqq", "rxt"))
+
+    nodes["vfx"].remove("bgl")
+    nodes["bgl"].remove("vfx")
+
+    nodes["qxr"].remove("btp")
+    nodes["btp"].remove("qxr")
+
+    nodes["rxt"].remove("bqq")
+    nodes["bqq"].remove("rxt")
+
+    """
+    G = nx.Graph()
+    for node in nodes:
+        G.add_node(node)
+
+    for edge in edges:
+        G.add_edge(edge[0], edge[1])
+
+    # plot the graph
+    nx.draw(G, with_labels=True)
+    plt.show()
+    """
+
+    counter1 = 0
+    current = list(nodes.keys())[0]
+
+    visitied = set()
+    stack = [current]
+    while stack:
+        node = stack.pop()
+        if node in visitied:
+            continue
+        visitied.add(node)
+        stack += nodes[node]
+        counter1 += 1
+
+    counter2 = 0
+    current = list(nodes.keys())[1]
+    for node in nodes:
+        if node in visitied:
+            continue
+        stack = [current]
+        break
+
+    visitied = set()
+    while stack:
+        node = stack.pop()
+        if node in visitied:
+            continue
+        visitied.add(node)
+        stack += nodes[node]
+        counter2 += 1
+
+    print(counter1, counter2)
+    print(counter1 * (len(nodes) - counter1))
+
+
+    return 
     scipy_graph = to_scipy_graph(nodes, edges)
     print(scipy_graph)
     print()

@@ -7,7 +7,11 @@ def read_input(file_name, sep = " ", transform = None):
         if transform:
             res.append([transform(x) for x in line.split(sep)])
         else:
-            res.append(line.split(sep))
+            splited = line.split(sep)
+            if len(splited) == 1:
+                res.append(splited[0])
+            else:
+                res.append(line.split(sep))
     
     if len(res[-1]) == 1 and res[-1][0] == "":
         res.pop()
